@@ -12,7 +12,15 @@ export const deleteEmpdata = data => {
 };
 
 export const showmodel = () => {
+  console.log("nowwwwwwwwwaction");
   return {
     type: "show_model"
+  };
+};
+
+export const hidemodel = () => {
+  console.log("nowwwwwwwwwaction");
+  return {
+    type: "hide_model"
   };
 };

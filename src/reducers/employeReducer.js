@@ -14,6 +14,8 @@ export default function(state = intialState, action) {
       return { ...state, empdata: action.payload };
     case "show_model":
       return { ...state, showempreg: true };
+    case "hide_model":
+      return { ...state, showempreg: false };
     default:
       return state;
   }
