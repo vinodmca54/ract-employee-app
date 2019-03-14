@@ -27,7 +27,9 @@ class Employee extends Component {
     empname: "",
     empmobilenum: "",
     empmail: "",
-    empaddress: ""
+    empaddress: "",
+    nameError: "",
+    _id: ""
   };
   state = this.formObj;
   async componentDidMount() {
@@ -57,10 +59,13 @@ class Employee extends Component {
   }
   handleClose() {
     this.props.dispatch(hidemodel());
+    this.setState({ ...this.formObj });
   }
 
   handleChange = event => {
+    console.log({ [event.target.name]: event.target.value });
     this.setState({ [event.target.name]: event.target.value });
+    this.validationname();
   };
 
   async Edithandler(id) {
@@ -72,8 +77,33 @@ class Employee extends Component {
     this.handleShow();
     this.setState({ ...this.state, ...Json });
   }
+  // validateform = () => {
+  //   const isFormvalid = true;
+  //   let errors = {};
 
+  //   if (!this.state.empname) {
+  //     console.log("hello");
+  //     errors["empname"] = "*Please enter your username.";
+  //   }
+  //   this.setState({
+  //     errors: errors
+  //   });
+  //   return isFormvalid;
+  // };
+
+  validationname = () => {
+    //alert("hkjfkjhfkgjhfdgkjf");
+    console.log();
+    const { name } = this.state.empname;
+    this.setState({
+      nameError: name == null ? "please enter emp name" : null
+    });
+  };
+  //validationemail = () => {};
+  //validationphone = () => {};
+  //validationaddress = () => {};
   handleSubmit = async event => {
+    console.log(this.state);
     event.preventDefault();
     event.stopPropagation();
     let response = await fetch("http://localhost:7777/empdata", {
@@ -85,21 +115,23 @@ class Employee extends Component {
       },
       body: JSON.stringify(this.state)
     });
-    if (response) {
-      this.handleClose();
-      this.setState({ ...this.formObj });
-      const empresponce = await fetch("http://localhost:7777/getempData");
-      const Json = await empresponce.json();
-      // this.props.getempdata(Json);
-      console.log("updated", Json);
-      this.props.dispatch(getempdata(Json));
-    }
+    // if (response) {
+    //   //this.handleClose();
+    //   this.setState({ ...this.formObj });
+    //   const empresponce = await fetch("http://localhost:7777/getempData");
+    //   const Json = await empresponce.json();
+    //   // this.props.getempdata(Json);
+    //   console.log("updated", Json);
+    //   this.props.dispatch(getempdata(Json));
+    // }
   };
 
   render() {
     const { empdata } = this.props;
     const { showempreg } = this.props;
     const { empname, empmobilenum, empmail, empaddress } = this.state;
+    const { nameError } = this.state.nameError;
+    console.log(this.state.nameError);
     return (
       <div className="container">
         <Button variant="primary" onClick={this.handleShow.bind(this)}>
@@ -124,6 +156,9 @@ class Employee extends Component {
                     placeholder="Enter Name..."
                     onChange={this.handleChange}
                   />
+                  <span style={{ color: "#f6f7e7" }}>
+                    {this.state.nameError}
+                  </span>
                 </Form.Group>
               </Form.Row>
               <Form.Row>
